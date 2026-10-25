@@ -476,38 +476,42 @@
 
 
 /* ---------- Mobile: logo centered, on hover/tap it lifts a little, name appears just below ---------- */
+/* ---------- Mobile: short plates, logo centered, name appears right under the logo ---------- */
 @media (max-width: 768px) {
   .collaborations-section .logo-grid {
     gap: 6px;
   }
 
   .collaborations-section .institution-logo {
-    min-height: 128px;
-    padding: 8px 4px;                /* equal padding: logo stays in the exact center */
+    min-height: 84px;                 /* short plate = small gap */
+    padding: 6px 4px;
     border-radius: 12px;
   }
 
   .collaborations-section .institution-logo img {
-    width: 88%;
-    max-width: 88%;
-    height: clamp(26px, 7vw, 44px);
+    width: 86%;
+    max-width: 86%;
+    height: clamp(24px, 6.5vw, 38px);
   }
 
-  /* Name: sits right under the lifted logo, complete text, no "..." */
+  /* Name: no clamp, full text, sits just below the lifted logo */
   .collaborations-section .institution-name {
-    bottom: 10px;
+    bottom: 6px;
     width: calc(100% - 6px);
-    font-size: clamp(.4rem, 1.9vw, .56rem);
-    line-height: 1.2;
+    font-size: clamp(.38rem, 1.7vw, .52rem);
+    line-height: 1.15;
     letter-spacing: 0;
-  
+    display: block;
+    overflow: visible;
+    -webkit-line-clamp: unset;
+    line-clamp: 2;
     overflow-wrap: anywhere;
   }
 
-  /* Logo lifts only a small amount, so the gap to the name stays small */
+  /* Logo lifts a small amount, so the gap to the name stays tiny */
   .collaborations-section .institution-logo.is-active img,
   .collaborations-section .institution-logo:focus-visible img {
-    transform: translateY(-14px) scale(1.04);
+    transform: translateY(-9px) scale(1.03);
   }
 }
 
