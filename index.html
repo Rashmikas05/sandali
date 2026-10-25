@@ -302,59 +302,92 @@
     .work-arrow { font-size: 1.2rem; transition: transform 250ms ease; }
     .work-item:hover .work-arrow { transform: translate(4px, -3px); }
 
-
-    /* =========================================================
-   10. INSTITUTIONAL COLLABORATIONS — static 5 + 4 logo grid
-   ========================================================= */
 /* =========================================================
    10. INSTITUTIONAL COLLABORATIONS — fluid 5 + 4 logo grid
    ========================================================= */
-.collaborations-section { background: var(--white); }
+/* Section background: soft gradient, so the glass has something to blur */
+/* =========================================================
+   10. INSTITUTIONAL COLLABORATIONS — floating glass plates
+   ========================================================= */
+
+/* =========================================================
+   10. INSTITUTIONAL COLLABORATIONS — glass plates (plates stay still)
+   ========================================================= */
+
+.collaborations-section {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(180,154,118,.28), transparent 42%),
+    radial-gradient(circle at 88% 80%, rgba(221,227,218,.95), transparent 46%),
+    radial-gradient(circle at 55% 45%, rgba(255,255,255,.9), transparent 55%),
+    #EFEDE7;
+}
 
 .collaborations-section .logo-grid {
   display: grid;
-  grid-template-columns: repeat(10, minmax(0, 1fr)); /* each logo = 2 columns */
+  grid-template-columns: repeat(10, minmax(0, 1fr)); /* each plate = 2 columns */
+  gap: clamp(10px, 1.8vw, 22px);
   width: 100%;
   max-width: 1040px;
   margin-inline: auto;
-  padding: 0 1px 1px 0;
+  padding: 0;
 }
 
+/* ---------- Glass plate (no transform, so it never moves) ---------- */
 .collaborations-section .institution-logo {
   grid-column: span 2;
   position: relative;
   overflow: hidden;
-  min-height: clamp(64px, 11vw, 150px);   /* shrinks with screen width */
-  padding: clamp(4px, 1.5vw, 22px);
+  min-height: clamp(104px, 13vw, 170px);
+  padding: clamp(8px, 1.5vw, 22px);
   display: grid;
   place-items: center;
   text-align: center;
-  border: 1px solid var(--border);
-  margin: 0 -1px -1px 0;
-  background: transparent;
-  transition: background 300ms ease, box-shadow 300ms ease;
+  margin: 0;
+  color: var(--charcoal);
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  border: 1px solid rgba(255,255,255,.75);
+  border-radius: clamp(14px, 2vw, 26px);
+  background: rgba(248,246,241,.55);
+  backdrop-filter: blur(26px) saturate(180%);
+  -webkit-backdrop-filter: blur(26px) saturate(180%);
+  box-shadow:
+    0 18px 45px rgba(37,37,33,.12),
+    0 4px 10px rgba(37,37,33,.05),
+    inset 0 1px 0 rgba(255,255,255,.9);
+  transition: box-shadow 450ms var(--ease), background 450ms var(--ease), opacity var(--duration) var(--ease);
 }
 
-/* 2nd row (4 logos) starts at column 2, so it is centered */
+/* Glossy shine */
+.collaborations-section .institution-logo::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 45%);
+  pointer-events: none;
+}
+
+/* Second row (4 plates) is centered */
 .collaborations-section .institution-logo:nth-child(6) { grid-column: 2 / span 2; }
 
-
-.collaborations-section .institution-logo img,
-.collaborations-section .institution-logo .logo-placeholder {
-  max-width: 100%;
-  transition: transform 350ms cubic-bezier(.22, .61, .36, 1), filter 350ms ease, opacity 350ms ease;
-}
-
+/* ---------- Logo image: same size box for every logo, original colours ---------- */
 .collaborations-section .institution-logo img {
-  width: auto;
-  height: auto;
-  max-height: clamp(24px, 5vw, 60px);
+  position: relative;
+  width: 80%;
+  max-width: 80%;
+  height: clamp(32px, 5.5vw, 70px);
   object-fit: contain;
-  filter: grayscale(1);
-  opacity: .75;
+  object-position: center;
+  transition: transform 450ms var(--ease);
 }
 
+/* Placeholder text (only while you still use placeholders) */
 .collaborations-section .institution-logo .logo-placeholder {
+  position: relative;
+  max-width: 100%;
   font-size: clamp(.44rem, 1.5vw, .8rem);
   line-height: 1.4;
   overflow-wrap: anywhere;
@@ -363,25 +396,74 @@
   .collaborations-section .institution-logo .logo-placeholder br { display: none; }
 }
 
-@media (hover: hover) {
-  .collaborations-section .institution-logo:hover,
-  .collaborations-section .institution-logo:focus-within {
-    z-index: 1;
-    background: var(--ivory);
-    box-shadow: 0 10px 24px rgba(0, 0, 0, .06);
-  }
- 
+/* ---------- Institute name: bottom area of the plate, max 2 lines ---------- */
+.collaborations-section .institution-name {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(8px, 1.6vw, 20px);
+  width: calc(100% - 16px);
+  transform: translate(-50%, 8px);
+  text-align: center;
+  font-size: clamp(.5rem, 1.3vw, .78rem);
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--charcoal);
 
-  .collaborations-section .institution-logo:hover img,
-  .collaborations-section .institution-logo:focus-within img {
-    transform: translateY(-4px) scale(1.07);
-    filter: grayscale(0);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-wrap: balance;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 400ms var(--ease), transform 400ms var(--ease);
+}
+
+/* ---------- Active state (click / touch / keyboard focus) ---------- */
+.collaborations-section .institution-logo.is-active img,
+.collaborations-section .institution-logo:focus-visible img {
+  transform: translateY(clamp(-18px, -2vw, -8px)) scale(1.04);
+}
+.collaborations-section .institution-logo.is-active .institution-name,
+.collaborations-section .institution-logo:focus-visible .institution-name {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.collaborations-section .institution-logo:focus-visible {
+  outline: 3px solid var(--champagne);
+  outline-offset: 4px;
+}
+
+/* ---------- Desktop hover (plate stays, only logo moves) ---------- */
+@media (hover: hover) {
+  .collaborations-section .institution-logo:hover {
+    background: rgba(255,255,255,.72);
+    box-shadow:
+      0 30px 70px rgba(37,37,33,.18),
+      0 8px 18px rgba(37,37,33,.07),
+      inset 0 1px 0 rgba(255,255,255,1);
+  }
+  .collaborations-section .institution-logo:hover img {
+    transform: translateY(clamp(-18px, -2vw, -8px)) scale(1.04);
+  }
+  .collaborations-section .institution-logo:hover .institution-name {
     opacity: 1;
+    transform: translate(-50%, 0);
   }
-  .collaborations-section .institution-logo:hover .logo-placeholder,
-  .collaborations-section .institution-logo:focus-within .logo-placeholder {
-    transform: translateY(-4px) scale(1.05);
-  }
+}
+
+/* ---------- Reveal: fade only, no transform on the plate ---------- */
+.motion-ready .collaborations-section .institution-logo.reveal {
+  opacity: 0;
+  transform: none;
+}
+.motion-ready .collaborations-section .institution-logo.reveal.is-visible {
+  opacity: 1;
+  transform: none;
 }
 
 .collab-note { margin-top: 20px; font-size: .76rem; }
@@ -389,30 +471,8 @@
 @media (prefers-reduced-motion: reduce) {
   .collaborations-section .institution-logo,
   .collaborations-section .institution-logo img,
-  .collaborations-section .institution-logo .logo-placeholder { transition: none; }
+  .collaborations-section .institution-name { transition: none; }
 }
-
-/* Mobile only: remove the logo box (background + border + padding) */
-@media (max-width: 768px) {
-  .qualifications-section .qualification-logo {
-    background: transparent;
-    border: 0;
-    padding: 0;
-    height: auto;
-    min-height: 0;
-    margin-bottom: 18px;
-    justify-content: start;   /* logo aligns with the text below */
-    justify-items: start;
-  }
-
-  .qualifications-section .qualification-logo img {
-    max-height: 64px;
-    width: auto;
-    max-width: 100%;
-    object-fit: contain;
-  }
-}
-
 
 
 
@@ -1435,15 +1495,42 @@
       Never imply a collaboration that has not been verified.
     -->
     <div class="logo-grid">
-      <div class="institution-logo reveal"><span class="logo-placeholder">Institution 01<br>Logo placeholder</span></div>
-      <div class="institution-logo reveal reveal-delay-1"><span class="logo-placeholder">Institution 02<br>Logo placeholder</span></div>
-      <div class="institution-logo reveal reveal-delay-2"><span class="logo-placeholder">Institution 03<br>Logo placeholder</span></div>
-      <div class="institution-logo reveal"><span class="logo-placeholder">Institution 04<br>Logo placeholder</span></div>
-      <div class="institution-logo reveal reveal-delay-1"><span class="logo-placeholder">Institution 05<br>Logo placeholder</span></div>
-      <div class="institution-logo reveal reveal-delay-2"><span class="logo-placeholder">Institution 06<br>Logo placeholder</span></div>
-      <div class="institution-logo reveal"><span class="logo-placeholder">Institution 07<br>Logo placeholder</span></div>
-      <div class="institution-logo reveal reveal-delay-1"><span class="logo-placeholder">Institution 08<br>Logo placeholder</span></div>
-      <div class="institution-logo reveal reveal-delay-2"><span class="logo-placeholder">Institution 09<br>Logo placeholder</span></div>
+        <div class="institution-logo reveal" tabindex="0">
+          <img src="https://imag.sandaliashara.com/logos/CAInstitutelogo.jpg" alt="Institution 01 logo" loading="lazy">
+          <span class="institution-name">Institute of Chartered Accountants</span>
+        </div>
+          <div class="institution-logo reveal reveal-delay-1" tabindex="0">
+          <img src="https://imag.sandaliashara.com/logos/IIT-LOGO.png" alt="Institution 02 logo" loading="lazy">
+          <span class="institution-name">Informatics Institute of Technology</span>
+        </div>
+          <div class="institution-logo reveal reveal-delay-2" tabindex="0">
+          <img src="https://imag.sandaliashara.com/logos/ruhuna-uni.png" alt="Institution 03 logo" loading="lazy">
+          <span class="institution-name">University of Ruhuna</span>
+        </div>
+          <div class="institution-logo reveal" tabindex="0">
+          <img src="https://imag.sandaliashara.com/logos/asset_american-corner.avif" alt="Institution 04 logo" loading="lazy">
+          <span class="institution-name">American Corner Matara</span>
+        </div>
+          <div class="institution-logo reveal reveal-delay-1" tabindex="0">
+          <img src="https://imag.sandaliashara.com/logos/sabaragamuwauni.png" alt="Institution 05 logo" loading="lazy">
+          <span class="institution-name">Sabaragamuwa University</span>
+        </div>
+          <div class="institution-logo reveal reveal-delay-2" tabindex="0">
+          <img src="https://imag.sandaliashara.com/logos/VTA_Sri_lanka_Logo.png" alt="Institution 06 logo" loading="lazy">
+          <span class="institution-name">Vocational Training Authority</span>
+        </div>
+          <div class="institution-logo reveal" tabindex="0">
+          <img src="https://imag.sandaliashara.com/logos/asset_lyceum.png" alt="Institution 07 logo" loading="lazy">
+          <span class="institution-name">Lyceum Education</span>
+        </div>
+          <div class="institution-logo reveal reveal-delay-1" tabindex="0">
+          <img src="https://imag.sandaliashara.com/logos/UgcLogoL.jpg" alt="Institution 08 logo" loading="lazy">
+          <span class="institution-name">University Grants Commission</span>
+        </div>
+        <div class="institution-logo reveal reveal-delay-2" tabindex="0">
+          <img src="https://imag.sandaliashara.com/logos/esoftlogo.jpg" alt="Institution 09 logo" loading="lazy">
+          <span class="institution-name">ESOFT Metro Campus</span>
+        </div>
     </div>
     <p class="collab-note">Development placeholders only. Replace with authentic logos and verified relationships before publishing.</p>
   </div>
@@ -1883,6 +1970,33 @@ if (headerSocials && primaryNav) {
         }
       });
     });
+
+    /* Logo plates: tap or click to show the institute name */
+const logoPlates = document.querySelectorAll(".institution-logo");
+
+function clearActivePlates(except) {
+  logoPlates.forEach((p) => { if (p !== except) p.classList.remove("is-active"); });
+}
+
+logoPlates.forEach((plate) => {
+  plate.addEventListener("click", (event) => {
+    event.stopPropagation();
+    clearActivePlates(plate);
+    plate.classList.toggle("is-active");
+  });
+  plate.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      clearActivePlates(plate);
+      plate.classList.toggle("is-active");
+    }
+  });
+});
+
+/* Tap anywhere else to close */
+document.addEventListener("click", () => clearActivePlates(null));
+
+
   </script>
 </body>
 </html>
