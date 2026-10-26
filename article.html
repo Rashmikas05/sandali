@@ -1179,9 +1179,17 @@ body.msg-lock { overflow: hidden; }
       method: "POST",
       headers: { "Content-Type": "application/json", "Accept": "application/json" },
       body: JSON.stringify({
-        access_key: KEY, subject: "Research enquiry: " + title,
-        from_name: n, name: n, phone: p, message: m, research: title, page: window.location.href
-      })
+  access_key: KEY,
+  subject: "Research enquiry: " + title,
+  from_name: n,
+  name: n,
+  email: em,
+  phone: p,
+  message: m,
+  research: title,
+  page: window.location.href
+})
+
     }).then(function (res) { return res.json(); }).then(function (d) {
       if (!d.success) throw new Error("fail");
       busy = false; send.disabled = false; send.textContent = "Send";
