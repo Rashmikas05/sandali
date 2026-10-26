@@ -573,6 +573,95 @@
   }
 }
 
+
+
+
+
+/* =========================================================
+   MESSAGE POPUP (expands from the Read more button)
+   ========================================================= */
+body.msg-lock { overflow: hidden; }
+.msg-backdrop {
+  position: fixed; inset: 0; z-index: 2000; background: rgba(37,37,33,.26);
+  opacity: 0; visibility: hidden;
+  backdrop-filter: blur(0) saturate(100%); -webkit-backdrop-filter: blur(0) saturate(100%);
+  transition: opacity 450ms var(--ease), backdrop-filter 450ms var(--ease), -webkit-backdrop-filter 450ms var(--ease), visibility 0s linear 450ms;
+}
+.msg-backdrop.show {
+  opacity: 1; visibility: visible;
+  backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%);
+  transition-delay: 0s;
+}
+.msg-card {
+  position: fixed; z-index: 2001; display: none; overflow: hidden; overscroll-behavior: contain;
+  border: 1px solid rgba(255,255,255,.75);
+  background: rgba(250,248,243,.64);
+  backdrop-filter: blur(34px) saturate(190%); -webkit-backdrop-filter: blur(34px) saturate(190%);
+  box-shadow: 0 34px 90px rgba(37,37,33,.24), 0 6px 16px rgba(37,37,33,.06), inset 0 1px 0 rgba(255,255,255,.9);
+  will-change: left, top, width, height;
+}
+.msg-card::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(140deg, rgba(255,255,255,.5), rgba(255,255,255,0) 42%);
+}
+.msg-inner { position: relative; z-index: 2; display: flex; flex-direction: column; gap: 12px; padding: 22px 24px 24px; }
+.msg-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.msg-title { margin: 0; font-size: 1.35rem; }
+.msg-title em { font-style: italic; color: var(--champagne); }
+.msg-x {
+  width: 34px; height: 34px; display: grid; place-items: center; flex-shrink: 0; cursor: pointer;
+  border-radius: 50%; font-size: 1.3rem; line-height: 1; color: var(--charcoal);
+  border: 1px solid rgba(255,255,255,.85); background: rgba(255,255,255,.55);
+  transition: transform 300ms var(--ease), background 300ms var(--ease);
+}
+.msg-x:hover { transform: rotate(90deg); background: #fff; }
+.msg-label { font-size: .74rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: -4px; }
+.msg-field {
+  width: 100%; padding: 13px 16px; font-size: 16px; color: var(--charcoal);
+  border: 1px solid rgba(37,37,33,.09); border-radius: 16px; background: rgba(255,255,255,.55);
+  box-shadow: inset 0 1px 2px rgba(37,37,33,.04);
+  transition: border-color 250ms ease, background 250ms ease, box-shadow 250ms ease;
+}
+.msg-field::placeholder { color: #9b9a92; }
+.msg-field:focus { outline: none; border-color: var(--champagne); background: rgba(255,255,255,.9); box-shadow: 0 0 0 4px rgba(180,154,118,.18); }
+.msg-text { min-height: 150px; resize: vertical; border-radius: 20px; line-height: 1.6; }
+.msg-error { min-height: 1.2em; margin: 0; font-size: .8rem; font-weight: 600; color: #a2483b; }
+.msg-send {
+  width: 100%; padding: 14px 20px; cursor: pointer; border: 0; border-radius: 999px;
+  font-size: .95rem; font-weight: 700; color: #fff; background: var(--charcoal);
+  box-shadow: 0 12px 26px rgba(37,37,33,.22);
+  transition: transform 300ms var(--ease), background 300ms var(--ease), opacity 300ms;
+}
+.msg-send:hover { background: #3a3a34; transform: translateY(-2px); }
+.msg-send:active { transform: scale(.97); }
+.msg-send:disabled { opacity: .65; cursor: progress; transform: none; }
+.msg-cancel {
+  align-self: center; padding: 7px 22px; cursor: pointer; border-radius: 999px;
+  font-size: .8rem; font-weight: 600; color: var(--charcoal);
+  border: 1px solid rgba(255,255,255,.85); background: rgba(255,255,255,.5);
+  transition: transform 300ms var(--ease), background 300ms var(--ease);
+}
+.msg-cancel:hover { background: #fff; transform: translateY(-1px); }
+.msg-cancel:active { transform: scale(.95); }
+.msg-toast {
+  position: fixed; z-index: 2100; top: 22px; left: 50%; opacity: 0; pointer-events: none;
+  transform: translate(-50%, -60px); display: inline-flex; align-items: center; gap: 10px;
+  padding: 11px 22px 11px 12px; border-radius: 999px; font-size: .92rem; font-weight: 700; color: var(--charcoal);
+  border: 1px solid rgba(255,255,255,.8); background: rgba(250,248,243,.7);
+  backdrop-filter: blur(26px) saturate(180%); -webkit-backdrop-filter: blur(26px) saturate(180%);
+  box-shadow: 0 18px 50px rgba(37,37,33,.18), inset 0 1px 0 rgba(255,255,255,.9);
+}
+.msg-tick { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--charcoal); color: #fff; font-size: .8rem; }
+@media (max-width: 620px) { .msg-inner { padding: 18px 18px 20px; } }
+
+
+
+
+
+
+
+
+
   </style>
 </head>
 
@@ -899,6 +988,177 @@
         }
       });
     });
+
+
+      /* =========================================================
+   MESSAGE POPUP: Read more button expands into a message card
+   ========================================================= */
+(function () {
+  /* EDIT HERE: your free Web3Forms access key (web3forms.com) */
+  var KEY = "361e912d-f138-4a2e-9784-da7316a677d7";
+  var ENDPOINT = "https://api.web3forms.com/submit";
+  var SUCCESS_TEXT = "Info sent!";
+
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var OPEN_MS = reduce ? 1 : 400, CLOSE_MS = reduce ? 1 : 300;
+  var SPRING = "cubic-bezier(.34,1.38,.5,1)";   /* slight overshoot = spring feel */
+  var SMOOTH = "cubic-bezier(.65,0,.25,1)";
+
+  var backdrop = document.createElement("div"); backdrop.className = "msg-backdrop";
+  var card = document.createElement("div"); card.className = "msg-card";
+  card.setAttribute("role", "dialog"); card.setAttribute("aria-modal", "true"); card.setAttribute("aria-label", "Send a message");
+  card.innerHTML =
+    '<form class="msg-inner" novalidate>' +
+      '<div class="msg-head"><h3 class="msg-title">Start a <em>conversation</em></h3>' +
+      '<button class="msg-x" type="button" aria-label="Close">&times;</button></div>' +
+      '<label class="msg-label" for="msgText">Your message</label>' +
+      '<textarea id="msgText" class="msg-field msg-text" rows="6"></textarea>' +
+      '<input id="msgName" class="msg-field" type="text" placeholder="Your name" autocomplete="name">' +
+      '<input id="msgPhone" class="msg-field" type="tel" inputmode="tel" placeholder="Phone number" autocomplete="tel">' +
+      '<input id="msgEmail" class="msg-field" type="email" placeholder="Email address" autocomplete="email" inputmode="email">' +
+      '<p class="msg-hint">Phone number or email: at least one is required.</p>' +
+      '<p class="msg-error" role="alert"></p>' +
+      '<button class="msg-send" type="submit">Send</button>' +
+      '<button class="msg-cancel" type="button">Cancel</button>' +
+    '</form>';
+  var toast = document.createElement("div"); toast.className = "msg-toast";
+  toast.innerHTML = '<span class="msg-tick">\u2713</span><span></span>';
+  toast.lastChild.textContent = SUCCESS_TEXT;
+  document.body.append(backdrop, card, toast);
+
+  var form = card.querySelector("form"), text = card.querySelector("#msgText"),
+      nameI = card.querySelector("#msgName"), phoneI = card.querySelector("#msgPhone"),emailI = card.querySelector("#msgEmail"),
+      err = card.querySelector(".msg-error"), send = card.querySelector(".msg-send");
+  var openBtn = null, title = "", isOpen = false, closing = false, busy = false;
+
+  function clearAnims() { card.getAnimations().forEach(function (a) { a.cancel(); }); form.getAnimations().forEach(function (a) { a.cancel(); }); }
+
+  function target() {
+    var w = Math.min(520, window.innerWidth - 28);
+    card.style.width = w + "px"; card.style.height = "auto";
+    var h = Math.min(card.offsetHeight, window.innerHeight - 28);
+    return { w: w, h: h, l: (window.innerWidth - w) / 2, t: Math.max(14, (window.innerHeight - h) / 2 - 8) };
+  }
+  function place(t) {
+    card.style.left = t.l + "px"; card.style.top = t.t + "px";
+    card.style.width = t.w + "px"; card.style.height = t.h + "px"; card.style.borderRadius = "30px";
+  }
+
+  function openCard(btn) {
+    if (isOpen) return;
+    isOpen = true; openBtn = btn;
+    title = (btn.closest(".card").querySelector("h3") || {}).textContent || "your research";
+    title = title.trim();
+    text.value = 'Hello Sandali, I came across "' + title + '". Can I discuss this further with you?';
+    err.textContent = "";
+    clearAnims();
+
+    var r = btn.getBoundingClientRect();
+    card.style.display = "block"; card.style.overflow = "hidden";
+    var t = target(); place(t);
+    form.style.opacity = "0";
+    backdrop.classList.add("show"); document.body.classList.add("msg-lock");
+    btn.style.visibility = "hidden";
+
+    var a = card.animate([
+      { left: r.left + "px", top: r.top + "px", width: r.width + "px", height: r.height + "px", borderRadius: (r.height / 2) + "px" },
+      { left: t.l + "px", top: t.t + "px", width: t.w + "px", height: t.h + "px", borderRadius: "30px" }
+    ], { duration: OPEN_MS, easing: SPRING, fill: "both" });
+    var f = form.animate([{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "none" }],
+      { duration: reduce ? 1 : 380, delay: reduce ? 0 : 220, easing: "ease-out", fill: "both" });
+    f.onfinish = function () { form.style.opacity = "1"; };
+    a.onfinish = function () {
+      card.style.overflowY = "auto";
+      text.focus({ preventScroll: true });
+      text.setSelectionRange(text.value.length, text.value.length);
+    };
+  }
+
+  function closeCard() {
+    if (!isOpen || closing) return;
+    closing = true;
+    var cur = card.getBoundingClientRect(), r = openBtn.getBoundingClientRect();
+    card.style.overflow = "hidden";
+    form.animate([{ opacity: 1 }, { opacity: 0 }], { duration: reduce ? 1 : 170, easing: "ease-in", fill: "both" });
+    var a = card.animate([
+      { left: cur.left + "px", top: cur.top + "px", width: cur.width + "px", height: cur.height + "px", borderRadius: "30px" },
+      { left: r.left + "px", top: r.top + "px", width: r.width + "px", height: r.height + "px", borderRadius: (r.height / 2) + "px" }
+    ], { duration: CLOSE_MS, delay: reduce ? 0 : 90, easing: SMOOTH, fill: "both" });
+    backdrop.classList.remove("show");
+    a.onfinish = function () {
+      card.style.display = "none"; clearAnims();
+      openBtn.style.visibility = ""; document.body.classList.remove("msg-lock");
+      try { openBtn.focus({ preventScroll: true }); } catch (e) {}
+      isOpen = false; closing = false;
+    };
+  }
+
+  function shake(el) { el.animate([{ transform: "translateX(0)" }, { transform: "translateX(-7px)" }, { transform: "translateX(6px)" }, { transform: "translateX(-4px)" }, { transform: "translateX(0)" }], { duration: 360 }); }
+
+  function showToast() {
+    toast.getAnimations().forEach(function (a) { a.cancel(); });
+    toast.animate([
+      { opacity: 0, transform: "translate(-50%,-70px) scale(.92)" },
+      { opacity: 1, transform: "translate(-50%,0) scale(1)", offset: .2 },
+      { opacity: 1, transform: "translate(-50%,0) scale(1)", offset: .78 },
+      { opacity: 0, transform: "translate(-50%,-16px) scale(.96)" }
+    ], { duration: reduce ? 1800 : 3000, delay: reduce ? 0 : 380, easing: SPRING, fill: "both" });
+  }
+
+  phoneI.addEventListener("input", function () {
+  this.value = this.value.replace(/[^\d+\-()\s]/g, "");
+  });
+
+
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (busy) return;
+    var m = text.value.trim(), n = nameI.value.trim(), p = phoneI.value.trim(), em = emailI.value.trim(), bad = null, msg = "";
+    if (!m) { bad = text; msg = "Please write a message."; }
+    else if (!n) { bad = nameI; msg = "Please enter your name."; }
+    else if (!p && !em) { bad = phoneI; msg = "Please enter a phone number or an email."; }
+    else if (p && !/^\+?[\d\s\-()]{7,}$/.test(p)) { bad = phoneI; msg = "Please enter a valid phone number."; }
+    else if (em && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em)) { bad = emailI; msg = "Please enter a valid email address."; }
+    if (bad) { err.textContent = msg; shake(bad); bad.focus(); return; }
+
+    busy = true; send.disabled = true; send.textContent = "Sending\u2026"; err.textContent = "";
+    fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify({
+        access_key: KEY, subject: "Research enquiry: " + title,
+        from_name: n, name: n, phone: p, message: m, research: title, page: window.location.href
+      })
+    }).then(function (res) { return res.json(); }).then(function (d) {
+      if (!d.success) throw new Error("fail");
+      busy = false; send.disabled = false; send.textContent = "Send";
+      nameI.value = ""; phoneI.value = "";
+      closeCard(); showToast();
+    }).catch(function () {
+      busy = false; send.disabled = false; send.textContent = "Send";
+      err.textContent = "Could not send. Please check your connection and try again.";
+    });
+  });
+
+  card.querySelector(".msg-x").addEventListener("click", closeCard);
+  card.querySelector(".msg-cancel").addEventListener("click", closeCard);
+  backdrop.addEventListener("click", closeCard);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeCard(); });
+  window.addEventListener("resize", function () { if (isOpen && !closing) { clearAnims(); place(target()); card.style.overflowY = "auto"; form.style.opacity = "1"; } });
+
+  /* Any Read more button opens the popup */
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest(".more");
+    if (!b) return;
+    e.preventDefault();
+    openCard(b);
+  });
+})();
+
+
+
+
   </script>
 </body>
 </html>
