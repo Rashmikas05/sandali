@@ -1785,11 +1785,6 @@
   <div class="t-marquee">
     <div class="t-track" id="tTrack"></div>
   </div>
-  <div class="t-controls">
-    <button class="t-ctrl" id="tPrev" type="button" aria-label="Previous testimonial">←</button>
-    <button class="t-ctrl t-ctrl--play" id="tPlay" type="button" aria-label="Pause auto-play">❚❚</button>
-    <button class="t-ctrl" id="tNext" type="button" aria-label="Next testimonial">→</button>
-  </div>
 </section>
 
 
@@ -2107,7 +2102,6 @@ const TESTIMONIALS = [
      MOVEMENT: auto-play + drag/swipe (with inertia) + arrows
      --------------------------------------------------------- */
   const marquee = track.parentElement;
-  const playBtn = document.getElementById("tPlay");
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
  
   let x = 0, vel = 0, tw = null;                 /* position, drag inertia, arrow tween */
@@ -2121,11 +2115,7 @@ const TESTIMONIALS = [
   const step = () => track.children[1].offsetLeft - track.children[0].offsetLeft;
   const modalOpen = () => document.body.classList.contains("t-modal-open");
  
-  function setPlayIcon() {
-    playBtn.textContent = userPaused ? "▶" : "❚❚";
-    playBtn.setAttribute("aria-label", userPaused ? "Play auto-play" : "Pause auto-play");
-  }
-  setPlayIcon();
+
  
   function frame(now) {
     const dt = Math.min((now - lastFrame) / 1000 || 0, .05);
@@ -2188,14 +2178,7 @@ const TESTIMONIALS = [
   marquee.addEventListener("pointerenter", e => { if (e.pointerType === "mouse") hover = true; });
   marquee.addEventListener("pointerleave", () => { hover = false; });
  
-  /* arrows + play/pause */
-  function glide(dir) {
-    vel = 0;
-    tw = { from: x, to: x + dir * step(), start: performance.now(), dur: 550 };
-  }
-  document.getElementById("tPrev").addEventListener("click", () => glide(1));
-  document.getElementById("tNext").addEventListener("click", () => glide(-1));
-  playBtn.addEventListener("click", () => { userPaused = !userPaused; setPlayIcon(); });
+ 
 })();
 
   </script>
