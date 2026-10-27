@@ -158,7 +158,7 @@
   background:
     linear-gradient(90deg,
       rgba(248,246,241,.97) 0%,
-      rgba(248,246,241,.90) 30%,
+      rgba(248,246,241,.90) 20%,
       rgba(248,246,241,.50) 52%,
       rgba(248,246,241,.08) 75%,
       rgba(248,246,241,0) 100%),
@@ -194,7 +194,7 @@
 /* Mobile: text top-left (a bit lower), tighter line spacing */
 @media (max-width: 760px) {
   .hb { min-height: 640px; align-items: flex-start; }
-  .hb-media img { object-position: 73% 60%; }
+  .hb-media img { object-position: 73% 80%; }
   .hb::before {
     background:
       linear-gradient(90deg,
@@ -719,23 +719,163 @@
     .publication-item h3 { margin-bottom: 8px; }
     .publication-item p { font-size: .88rem; margin-bottom: 0; }
 
+    
+    
+    
     /* =========================================================
-       12. PROFESSIONAL GALLERY
-       ========================================================= */
-    .gallery-section { background: var(--sage); }
-    .gallery-grid { display: grid; grid-template-columns: 1.08fr .92fr 1fr; gap: 18px; align-items: start; }
-    .gallery-tile { min-width: 0; }
-    .gallery-placeholder {
-      display: grid; place-items: center; text-align: center; padding: 24px; color: #55594f;
-      background: rgba(255,255,255,.42); border: 1px solid rgba(37,37,33,.12); aspect-ratio: 4/5;
-    }
-    .gallery-tile:nth-child(2) { margin-top: 54px; }
-    .gallery-tile:nth-child(2) .gallery-placeholder { aspect-ratio: 4/4.8; }
-    .gallery-tile:nth-child(3) { margin-top: 110px; }
-    .gallery-tile:nth-child(3) .gallery-placeholder { aspect-ratio: 4/5.4; }
-    .gallery-placeholder strong { font-family: var(--serif); font-size: 1.45rem; font-weight: 500; }
-    .gallery-placeholder span { font-size: .7rem; margin-top: 9px; text-transform: uppercase; letter-spacing: .1em; }
+   12. PROFESSIONAL GALLERY — glass photo plates
+   ========================================================= */
+.gallery-section {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(180,154,118,.28), transparent 42%),
+    radial-gradient(circle at 88% 80%, rgba(221,227,218,.95), transparent 46%),
+    radial-gradient(circle at 55% 45%, rgba(255,255,255,.9), transparent 55%),
+    #EFEDE7;
+}
 
+/* Wider than the normal container so the plates are bigger */
+.gallery-section .container {
+  width: min(1380px, calc(100% - clamp(24px, 4vw, 64px)));
+}
+.gallery-section .section-heading { max-width: 760px; }
+
+/* 3 plates in parallel, same height */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(14px, 1.8vw, 26px);
+  align-items: stretch;
+}
+
+/* ---------- Plate ---------- */
+.gallery-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  min-width: 0;
+  margin: 0;
+  aspect-ratio: 3 / 4;
+  border: 1px solid rgba(255,255,255,.75);
+  border-radius: clamp(18px, 2vw, 28px);
+  background: linear-gradient(145deg, #e7e7dd, #cbd3c8);
+  box-shadow:
+    0 18px 45px rgba(37,37,33,.12),
+    0 4px 10px rgba(37,37,33,.05),
+    inset 0 1px 0 rgba(255,255,255,.9);
+  transition: box-shadow 450ms var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---------- Photo ---------- */
+.gallery-media { position: absolute; inset: 0; z-index: -2; }
+.gallery-media img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;          /* focus point: center top / center 30% etc. */
+  transition: transform 900ms var(--ease);
+}
+
+/* Sample box: sits BEHIND the photo, visible only if the photo is missing */
+.gallery-sample {
+  position: absolute; inset: 0;
+  display: grid; place-items: center; align-content: center; text-align: center;
+  padding: 24px 24px 90px;
+  color: #55594f; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase;
+}
+.gallery-sample::before {
+  content: ""; width: 54px; height: 54px; margin: 0 auto 12px; display: block;
+  border: 1px solid rgba(37,37,33,.25); border-radius: 50%;
+  background:
+    linear-gradient(rgba(37,37,33,.35), rgba(37,37,33,.35)) center / 18px 1px no-repeat,
+    linear-gradient(rgba(37,37,33,.35), rgba(37,37,33,.35)) center / 1px 18px no-repeat;
+}
+
+/* ---------- Gradient: photo fades into the caption area ---------- */
+.gallery-card::before {
+  content: "";
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    linear-gradient(to top,
+      rgba(37,37,33,.62) 0%,
+      rgba(37,37,33,.32) 18%,
+      rgba(37,37,33,0) 38%),
+    linear-gradient(135deg, rgba(255,255,255,.26) 0%, rgba(255,255,255,0) 40%);
+}
+
+/* ---------- Caption: small glass strip ---------- */
+.gallery-caption {
+  position: absolute;
+  left: 10px; right: 10px; bottom: 10px;
+  padding: 12px 16px 14px;
+  border: 1px solid rgba(255,255,255,.55);
+  border-radius: clamp(12px, 1.4vw, 18px);
+  background: rgba(248,246,241,.16);
+  backdrop-filter: blur(22px) saturate(170%);
+  -webkit-backdrop-filter: blur(22px) saturate(170%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.55);
+  color: var(--white);
+  transition: transform 500ms var(--ease), background 500ms var(--ease);
+}
+.gallery-no {
+  display: block; margin-bottom: 4px;
+  font-size: .6rem; font-weight: 700; letter-spacing: .15em; color: #E3CFA9;
+}
+.gallery-caption h3 {
+  margin: 0 0 4px;
+  font-size: clamp(1.05rem, 1.35vw, 1.3rem);
+  color: var(--white);
+}
+.gallery-caption p {
+  margin: 0;
+  font-size: .78rem; line-height: 1.5;
+  color: rgba(255,255,255,.86);
+  display: -webkit-box;
+  -webkit-line-clamp: 2; line-clamp: 2;      /* max 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ---------- Hover (desktop): plate stays, photo zooms, caption lifts ---------- */
+@media (hover: hover) {
+  .gallery-card:hover {
+    box-shadow:
+      0 30px 70px rgba(37,37,33,.2),
+      0 8px 18px rgba(37,37,33,.08),
+      inset 0 1px 0 rgba(255,255,255,1);
+  }
+  .gallery-card:hover .gallery-media img { transform: scale(1.06); }
+  .gallery-card:hover .gallery-caption {
+    transform: translateY(-6px);
+    background: rgba(248,246,241,.24);
+  }
+}
+
+/* ---------- Reveal: fade only, plate never moves ---------- */
+.motion-ready .gallery-card.reveal { opacity: 0; transform: none; }
+.motion-ready .gallery-card.reveal.is-visible { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-media img, .gallery-caption { transition: none; }
+}
+
+/* ---------- Small laptops / tablets: still 3 in a row, tighter ---------- */
+@media (max-width: 1100px) {
+  .gallery-card { aspect-ratio: 3 / 4.2; }
+  .gallery-caption { left: 8px; right: 8px; bottom: 8px; padding: 10px 12px 12px; }
+  .gallery-caption p { font-size: .74rem; }
+}
+
+/* ---------- Mobile: one plate under another ---------- */
+@media (max-width: 768px) {
+  .gallery-grid { grid-template-columns: 1fr; gap: 18px; }
+  .gallery-card { aspect-ratio: 4 / 5; border-radius: 22px; }
+  .gallery-caption { left: 10px; right: 10px; bottom: 10px; padding: 13px 16px 15px; }
+  .gallery-caption h3 { font-size: 1.2rem; }
+  .gallery-caption p { font-size: .8rem; }
+}
 
     /* =========================================================
    VOLUNTEER WORK
@@ -1113,12 +1253,6 @@
       .qualification-logo { height: 80px; padding: 8px; }
       .qualification h3 { font-size: 1.28rem; }
 
-      .gallery-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
-      .gallery-tile:nth-child(2) { margin-top: 30px; }
-      .gallery-tile:nth-child(3) { margin-top: 0; grid-column: 1 / -1; width: 68%; justify-self: center; }
-      .gallery-tile:nth-child(3) .gallery-placeholder { aspect-ratio: 5/4; }
-      .gallery-placeholder { padding: 15px; }
-      .gallery-placeholder strong { font-size: 1.2rem; }
       .footer-inner { align-items: flex-start; flex-direction: column; gap: 12px; }
       .footer-links { gap: 14px; }
       .button { min-height: 50px; }
@@ -1787,30 +1921,63 @@
       </div>
     </section>
 
-    <!-- PROFESSIONAL GALLERY: replace visual placeholders with real photos -->
-    <section class="section gallery-section" id="highlights" aria-labelledby="galleryTitle">
-      <div class="container">
-        <div class="section-heading reveal">
-          <p class="eyebrow">Professional Highlights</p>
-          <h2 id="galleryTitle">A Practice of <span class="accent">Connection</span></h2>
-          <p>Connecting people, ideas, and opportunities through language, learning, and meaningful professional engagement.</p>
+    <!-- PROFESSIONAL GALLERY: edit each image src, title and description -->
+<section class="section gallery-section" id="highlights" aria-labelledby="galleryTitle">
+  <div class="container">
+    <div class="section-heading reveal">
+      <p class="eyebrow">Professional Highlights</p>
+      <h2 id="galleryTitle">A Practice of <span class="accent">Connection</span></h2>
+      <p>Connecting people, ideas, and opportunities through language, learning, and meaningful professional engagement.</p>
+    </div>
+
+    <div class="gallery-grid">
+
+      <!-- Plate 01 -->
+      <figure class="gallery-card reveal">
+        <div class="gallery-media">
+          <div class="gallery-sample">Sample photo</div>
+          <img src="https://imag.sandaliashara.com/asset/lecturer_sandali_ashara.avif" alt="Sandali Ashara delivering a lecture" loading="lazy" decoding="async" onerror="this.style.display='none'">
         </div>
-        <div class="gallery-grid">
-          <div class="gallery-tile reveal reveal--image">
-            <!-- EDIT HERE: Replace with a real, authorized lecture photograph. -->
-            <div class="gallery-placeholder"><div><strong>Lectures &amp; Learning</strong><br><span>Photo placeholder</span></div></div>
-          </div>
-          <div class="gallery-tile reveal reveal--image reveal-delay-1">
-            <!-- EDIT HERE: Replace with a real, authorized workshop photograph. -->
-            <div class="gallery-placeholder"><div><strong>Training &amp; Workshops</strong><br><span>Photo placeholder</span></div></div>
-          </div>
-          <div class="gallery-tile reveal reveal--image reveal-delay-2">
-            <!-- EDIT HERE: Replace with a real professional portrait or academic event photograph. -->
-            <div class="gallery-placeholder"><div><strong>Academic Moments</strong><br><span>Photo placeholder</span></div></div>
-          </div>
+        <figcaption class="gallery-caption">
+          <span class="gallery-no">HIGHLIGHT / 01</span>
+          <h3>Lectures &amp; Learning</h3>
+          <p>Replace this with a short description about the lecture, the audience, and the learning experience.</p>
+        </figcaption>
+      </figure>
+
+      <!-- Plate 02 -->
+      <figure class="gallery-card reveal reveal-delay-1">
+        <div class="gallery-media">
+          <div class="gallery-sample">Sample photo</div>
+          <img src="https://imag.sandaliashara.com/asset/University_of_Ruhuna.avif" alt="Teacher training workshop" loading="lazy" decoding="async" onerror="this.style.display='none'">
         </div>
-      </div>
-    </section>
+        <figcaption class="gallery-caption">
+          <span class="gallery-no">HIGHLIGHT / 02</span>
+          <h3>Training &amp; Workshops</h3>
+          <p>Replace this with details about the workshop, the participants, and the skills that were developed.</p>
+        </figcaption>
+      </figure>
+
+      <!-- Plate 03 -->
+      <figure class="gallery-card reveal reveal-delay-2">
+        <div class="gallery-media">
+          <div class="gallery-sample">Sample photo</div>
+          <img src="https://imag.sandaliashara.com/asset/celta_program_british_council.avif" alt="Academic event" loading="lazy" decoding="async" onerror="this.style.display='none'">
+        </div>
+        <figcaption class="gallery-caption">
+          
+          <h3>Academic Moments</h3>
+          <p>Replace this with information about the academic event, conference, or professional engagement.</p>
+        </figcaption>
+      </figure>
+
+    </div>
+  </div>
+</section>
+
+
+
+
 
       <!-- VOLUNTEER WORK -->
 <section class="section volunteer-section" id="volunteer" aria-labelledby="volunteerTitle">
@@ -1831,7 +1998,7 @@
     <!-- Volunteer Program 01 -->
     <article class="volunteer-item reveal">
       <div class="volunteer-image">
-        images/volunteer-01.jpg
+        <img src="https://imag.sandaliashara.com/asset/volunteer_matara.avif" alt="Volunteer Program Matara american corner" loading="lazy">
       </div>
 
       <div class="volunteer-content">
@@ -1848,7 +2015,7 @@
     <!-- Volunteer Program 02 -->
     <article class="volunteer-item volunteer-item-reverse reveal">
       <div class="volunteer-image">
-        images/volunteer-02.jpg
+        <img src="https://imag.sandaliashara.com/asset/sandalihero.avif" alt="Volunteer Program University of Ruhuna" loading="lazy">
       </div>
 
       <div class="volunteer-content">
