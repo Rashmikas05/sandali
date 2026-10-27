@@ -588,6 +588,26 @@
     height: clamp(24px, 6.5vw, 38px);
   }
 
+
+@media (max-width: 768px) {
+  .collaborations-section .institution-logo:nth-child(2) img,
+  .collaborations-section .institution-logo:nth-child(3) img,
+  .collaborations-section .institution-logo:nth-child(4) img,
+  .collaborations-section .institution-logo:nth-child(5) img,
+  .collaborations-section .institution-logo:nth-child(7) img,
+  .collaborations-section .institution-logo:nth-child(8) img {
+    width: 70%;
+    max-width: 70%;
+    height: clamp(20px, 8vw, 40px);   /* kalin: 46–64px */
+  }
+}
+
+
+
+  
+
+
+
   /* Name: no clamp, full text, sits just below the lifted logo */
   .collaborations-section .institution-name {
     bottom: 6px;
