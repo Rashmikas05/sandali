@@ -326,24 +326,167 @@
 
 
     /* =========================================================
-       4. ABOUT
-       ========================================================= */
-    .about-section { background: var(--white); }
-    .about-grid { display: grid; grid-template-columns: .8fr 1fr; gap: clamp(42px, 9vw, 125px); align-items: center; }
-    .about-visual { position: relative; max-width: 440px; }
-    .about-art {
-      min-height: 470px; aspect-ratio: 4 / 5; display: grid; place-items: center; text-align: center;
-      padding: 35px; background: var(--sage); position: relative; overflow: hidden;
-    }
-    .about-art::before, .about-art::after { content: ""; position: absolute; border: 1px solid rgba(37,37,33,.18); border-radius: 50%; width: 250px; height: 250px; }
-    .about-art::after { width: 340px; height: 340px; }
-    .about-art-inner { position: relative; z-index: 1; }
-    .about-art .monogram { font-family: var(--serif); font-size: clamp(4rem, 8vw, 7rem); line-height: 1; color: rgba(37,37,33,.72); }
-    .about-art p { max-width: 200px; margin: 18px auto 0; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: #55594f; }
-    .about-copy h2 { margin-bottom: 22px; }
-    .about-copy .lead { color: var(--charcoal); font-size: 1.12rem; line-height: 1.8; }
-    .about-copy p { max-width: 620px; }
-    .about-signoff { margin-top: 28px; font-family: var(--serif); font-size: 1.5rem; font-style: italic; color: var(--champagne); }
+   4. ABOUT
+   ========================================================= */
+.about-section { background: var(--white); }
+
+.about-grid {
+  display: grid;
+  grid-template-columns: .8fr 1fr;
+  gap: clamp(42px, 9vw, 125px);
+  align-items: center;
+}
+
+.about-visual { position: relative; max-width: 440px; }
+
+/* ---------- Photo ---------- */
+.about-photo {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: clamp(18px, 2vw, 28px);
+  background: linear-gradient(145deg, #e7e7dd, #cbd3c8);
+  border: 1px solid rgba(255,255,255,.75);
+  box-shadow:
+    0 18px 45px rgba(37,37,33,.12),
+    0 4px 10px rgba(37,37,33,.05),
+    inset 0 1px 0 rgba(255,255,255,.9);
+}
+.about-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  transition: transform 900ms var(--ease);
+}
+.about-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.22) 0%, rgba(255,255,255,0) 40%);
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .about-photo:hover img { transform: scale(1.05); }
+}
+
+/* ---------- Text ---------- */
+.about-copy h2 { margin-bottom: 26px; }
+
+/* Glass card */
+.about-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  padding: clamp(24px, 3vw, 40px);
+  border: 1px solid rgba(255,255,255,.75);
+  border-radius: clamp(18px, 2vw, 28px);
+  background: rgba(248,246,241,.58);
+  backdrop-filter: blur(26px) saturate(180%);
+  -webkit-backdrop-filter: blur(26px) saturate(180%);
+  box-shadow:
+    0 18px 45px rgba(37,37,33,.12),
+    0 4px 10px rgba(37,37,33,.05),
+    inset 0 1px 0 rgba(255,255,255,.9);
+}
+.about-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(135deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 45%);
+  pointer-events: none;
+}
+
+.about-card p { max-width: none; margin-bottom: 18px; }
+.about-card .lead {
+  color: var(--charcoal);
+  font-family: var(--serif);
+  font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+  line-height: 1.55;
+  letter-spacing: -.01em;
+  padding-left: 20px;
+  border-left: 2px solid var(--champagne);
+  margin-bottom: 24px;
+}
+
+/* Expand / collapse (smooth height) */
+.about-more {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 650ms var(--ease), opacity 500ms var(--ease);
+}
+.about-more-inner { overflow: hidden; min-height: 0; }
+.about-more.is-open { grid-template-rows: 1fr; opacity: 1; }
+
+/* Bottom row */
+.about-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px 22px;
+  margin-top: 6px;
+}
+.about-actions .text-link { margin: 0; }
+
+/* See more: glass pill */
+.about-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 46px;
+  padding: 8px 8px 8px 24px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.8);
+  background: rgba(255,255,255,.6);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  color: var(--charcoal);
+  font-size: .84rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(37,37,33,.10), inset 0 1px 0 rgba(255,255,255,.9);
+  transition: transform 300ms var(--ease), background 300ms var(--ease);
+}
+.about-toggle-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--charcoal);
+  color: var(--white);
+  font-size: 1.1rem;
+  line-height: 1;
+  transition: transform 450ms var(--ease), background 300ms var(--ease);
+}
+.about-toggle[aria-expanded="true"] .about-toggle-icon { transform: rotate(45deg); }
+@media (hover: hover) {
+  .about-toggle:hover { background: rgba(255,255,255,.9); transform: translateY(-2px); }
+  .about-toggle:hover .about-toggle-icon { background: var(--champagne); }
+}
+.about-toggle:active { transform: scale(.95); }
+
+.about-signoff {
+  margin-top: 28px;
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-style: italic;
+  color: var(--champagne);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-more, .about-toggle-icon { transition: none; }
+}
+
+
+
 
     /* =========================================================
    5. ACADEMIC QUALIFICATIONS — glass plates
@@ -442,9 +585,50 @@
   }
 }
 
-/* Reveal: fade only, plate never moves */
-.motion-ready .qualification.reveal { opacity: 0; transform: none; }
-.motion-ready .qualification.reveal.is-visible { opacity: 1; transform: none; }
+/* ---------- Reveal: photo ready වුණාම විතරයි, lassanata mathu wenawa ---------- */
+.motion-ready .gallery-card.reveal {
+  opacity: 0;
+  transform: none;
+  transition: opacity 900ms var(--ease);
+}
+.motion-ready .gallery-card.reveal.is-visible.is-ready {
+  opacity: 1;
+}
+
+/* photo එක fade-in වෙනවා + සුළු zoom-out එකක් */
+.gallery-media img {
+  opacity: 0;
+  transform: scale(1.06);
+  transition: opacity 1000ms var(--ease), transform 1400ms var(--ease);
+}
+.gallery-card.is-ready .gallery-media img {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* caption එක පොඩි delay එකකින් පස්සේ එනවා */
+.gallery-caption {
+  opacity: 0;
+  transition: opacity 700ms var(--ease) 350ms, transform 500ms var(--ease), background 500ms var(--ease);
+}
+.gallery-card.is-ready .gallery-caption { opacity: 1; }
+
+/* delay තියෙන එවුන්ට transition-delay override නොවෙන්න */
+.motion-ready .gallery-card.reveal-delay-1,
+.motion-ready .gallery-card.reveal-delay-2 { transition-delay: 0ms !important; }
+.gallery-card:nth-child(2).is-ready .gallery-media img { transition-delay: 120ms; }
+.gallery-card:nth-child(3).is-ready .gallery-media img { transition-delay: 240ms; }
+
+@media (hover: hover) {
+  .gallery-card.is-ready:hover .gallery-media img { transform: scale(1.06); transition-delay: 0ms; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery-media img, .gallery-card.reveal { transition: none !important; }
+}
+
+
+
 
     /* =========================================================
        6. EXPERTISE
@@ -775,7 +959,13 @@
   width: 100%; height: 100%;
   object-fit: cover;
   object-position: center;          /* focus point: center top / center 30% etc. */
-  transition: transform 900ms var(--ease);
+  opacity: 0;                       /* ready වුණාම fade-in */
+  transform: scale(1.1);            /* ready වුණාම සෙමින් settle */
+  transition: opacity 1400ms var(--ease), transform 2000ms var(--ease);
+}
+.gallery-card.is-ready .gallery-media img {
+  opacity: 1;
+  transform: scale(1);
 }
 
 /* Sample box: sits BEHIND the photo, visible only if the photo is missing */
@@ -793,7 +983,7 @@
     linear-gradient(rgba(37,37,33,.35), rgba(37,37,33,.35)) center / 1px 18px no-repeat;
 }
 
-/* ---------- Gradient: photo fades into the caption area ---------- */
+
 .gallery-card::before {
   content: "";
   position: absolute; inset: 0; z-index: -1; pointer-events: none;
@@ -805,7 +995,7 @@
     linear-gradient(135deg, rgba(255,255,255,.26) 0%, rgba(255,255,255,0) 40%);
 }
 
-/* ---------- Caption: small glass strip ---------- */
+
 .gallery-caption {
   position: absolute;
   left: 10px; right: 10px; bottom: 10px;
@@ -817,7 +1007,16 @@
   -webkit-backdrop-filter: blur(22px) saturate(170%);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.55);
   color: var(--white);
-  transition: transform 500ms var(--ease), background 500ms var(--ease);
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 800ms var(--ease) 600ms,
+    transform 900ms var(--ease) 600ms,
+    background 500ms var(--ease);
+}
+.gallery-card.is-ready .gallery-caption {
+  opacity: 1;
+  transform: none;
 }
 .gallery-no {
   display: block; margin-bottom: 4px;
@@ -838,7 +1037,25 @@
   overflow: hidden;
 }
 
-/* ---------- Hover (desktop): plate stays, photo zooms, caption lifts ---------- */
+
+.motion-ready .gallery-card.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 1100ms var(--ease),
+    transform 1300ms var(--ease),
+    box-shadow 450ms var(--ease);
+}
+.motion-ready .gallery-card.reveal.is-visible.is-ready {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* stagger: opacity + transform වලට විතරයි delay (hover shadow එකට නෑ) */
+.motion-ready .gallery-card.reveal-delay-1 { transition-delay: 150ms, 150ms, 0ms !important; }
+.motion-ready .gallery-card.reveal-delay-2 { transition-delay: 300ms, 300ms, 0ms !important; }
+
+/* ---------- Hover (desktop): photo zoom, caption lifts ---------- */
 @media (hover: hover) {
   .gallery-card:hover {
     box-shadow:
@@ -846,19 +1063,21 @@
       0 8px 18px rgba(37,37,33,.08),
       inset 0 1px 0 rgba(255,255,255,1);
   }
-  .gallery-card:hover .gallery-media img { transform: scale(1.06); }
-  .gallery-card:hover .gallery-caption {
+  .gallery-card.is-ready:hover .gallery-media img {
+    transform: scale(1.06);
+    transition: transform 900ms var(--ease);
+  }
+  .gallery-card.is-ready:hover .gallery-caption {
     transform: translateY(-6px);
     background: rgba(248,246,241,.24);
+    transition-delay: 0ms;
   }
 }
 
-/* ---------- Reveal: fade only, plate never moves ---------- */
-.motion-ready .gallery-card.reveal { opacity: 0; transform: none; }
-.motion-ready .gallery-card.reveal.is-visible { opacity: 1; transform: none; }
-
 @media (prefers-reduced-motion: reduce) {
-  .gallery-media img, .gallery-caption { transition: none; }
+  .gallery-media img,
+  .gallery-caption,
+  .gallery-card.reveal { transition: none !important; }
 }
 
 /* ---------- Small laptops / tablets: still 3 in a row, tighter ---------- */
@@ -1094,9 +1313,11 @@
   backdrop-filter: blur(30px) saturate(190%); -webkit-backdrop-filter: blur(30px) saturate(190%);
   box-shadow: 0 40px 100px rgba(37,37,33,.35), inset 0 1px 0 rgba(255,255,255,.9);
   clip-path: inset(0 round 26px);
-  transition: clip-path 350ms var(--ease);
+  transition: clip-path 520ms cubic-bezier(.32,.72,0,1);
   will-change: clip-path;
 }
+
+
 .t-panel-in {
   padding: 26px 26px 26px; opacity: 0; transform: translateY(10px);
   transition: opacity 300ms ease, transform 500ms var(--ease);
@@ -1109,7 +1330,7 @@
   border-radius: 16px; overflow: hidden; background: rgba(255,255,255,.7); border: 1px solid var(--border);
   display: grid; place-items: center; min-height: 160px; color: var(--muted); font-size: .8rem;
 }
-.t-shot img { display: block; width: 100%; max-height: calc(100dvh - 190px); object-fit: contain; }
+.t-shot img { display: block; width: 100%; height: auto; max-height: calc(100dvh - 190px); object-fit: contain; }
  
 .t-close {
   position: absolute; top: 18px; right: 18px; z-index: 3; width: 40px; height: 40px; border-radius: 50%;
@@ -1135,14 +1356,172 @@
     /* =========================================================
        13. CONTACT & FOOTER
        ========================================================= */
-    .contact-section { background: var(--charcoal); color: var(--ivory); }
-    .contact-grid { display: grid; grid-template-columns: 1fr .72fr; gap: clamp(38px, 8vw, 110px); align-items: end; }
-    .contact-section .eyebrow, .contact-section p { color: #c6c3b9; }
-    .contact-section h2 { max-width: 750px; margin-bottom: 24px; }
-    .contact-links { border-top: 1px solid rgba(255,255,255,.2); }
-    .contact-link { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 17px 0; border-bottom: 1px solid rgba(255,255,255,.2); color: var(--ivory); font-size: .88rem; }
-    .contact-link span:last-child { color: var(--champagne); transition: transform 250ms ease; }
-    .contact-link:hover span:last-child { transform: translate(4px, -3px); }
+   /* =========================================================
+   13. CONTACT — glass form + round glass icons
+   ========================================================= */
+.contact-section {
+  position: relative;
+  overflow: hidden;
+  color: var(--ivory);
+  background:
+    radial-gradient(circle at 88% 12%, rgba(180,154,118,.24), transparent 46%),
+    radial-gradient(circle at 8% 92%, rgba(221,227,218,.10), transparent 48%),
+    var(--charcoal);
+}
+.contact-section .eyebrow,
+.contact-section p { color: #c6c3b9; }
+.contact-section h2 { max-width: 750px; margin-bottom: 24px; }
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr .95fr;
+  gap: clamp(38px, 8vw, 110px);
+  align-items: center;
+}
+
+/* ---------- Glass form card ---------- */
+.contact-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  padding: clamp(24px, 3vw, 40px);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: clamp(20px, 2.2vw, 30px);
+  background: rgba(255,255,255,.06);
+  backdrop-filter: blur(26px) saturate(180%);
+  -webkit-backdrop-filter: blur(26px) saturate(180%);
+  box-shadow:
+    0 28px 70px rgba(0,0,0,.35),
+    inset 0 1px 0 rgba(255,255,255,.22);
+}
+.contact-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(135deg, rgba(255,255,255,.14) 0%, rgba(255,255,255,0) 45%);
+  pointer-events: none;
+}
+
+.cf-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.cf-field { margin-bottom: 18px; min-width: 0; }
+.cf-field label {
+  display: block;
+  margin-bottom: 8px;
+  color: #d9d6cc;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.cf-field input,
+.cf-field textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 14px;
+  background: rgba(255,255,255,.07);
+  color: var(--ivory);
+  font-size: 16px; /* iPhone zoom නොවෙන්න */
+  line-height: 1.5;
+  transition: border-color 250ms var(--ease), background 250ms var(--ease), box-shadow 250ms var(--ease);
+}
+.cf-field textarea { resize: vertical; min-height: 130px; }
+.cf-field input::placeholder,
+.cf-field textarea::placeholder { color: rgba(255,255,255,.38); }
+.cf-field input:focus,
+.cf-field textarea:focus {
+  outline: none;
+  border-color: var(--champagne);
+  background: rgba(255,255,255,.11);
+  box-shadow: 0 0 0 3px rgba(180,154,118,.25);
+}
+.cf-field.has-error input,
+.cf-field.has-error textarea { border-color: #e59a8f; }
+.cf-honeypot { display: none !important; }
+
+/* Submit button: glass pill */
+.cf-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  min-height: 54px;
+  padding: 10px 10px 10px 28px;
+  border: 1px solid rgba(255,255,255,.75);
+  border-radius: 999px;
+  background: rgba(248,246,241,.92);
+  color: var(--charcoal);
+  font-size: .84rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  cursor: pointer;
+  box-shadow: 0 14px 34px rgba(0,0,0,.3), inset 0 1px 0 #fff;
+  transition: transform 350ms var(--ease), background 350ms var(--ease), opacity 250ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.cf-submit-arrow {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--charcoal);
+  color: var(--white);
+  transition: transform 350ms var(--ease), background 350ms var(--ease);
+}
+@media (hover: hover) {
+  .cf-submit:hover { transform: translateY(-3px); background: #fff; }
+  .cf-submit:hover .cf-submit-arrow { transform: translateX(3px); background: var(--champagne); }
+}
+.cf-submit:active { transform: scale(.95); }
+.cf-submit:disabled { opacity: .6; cursor: wait; transform: none; }
+
+/* Status message */
+.cf-status { min-height: 1.4em; margin: 16px 0 0; font-size: .86rem; line-height: 1.5; }
+.cf-status.is-success { color: #b9d8b4; }
+.cf-status.is-error { color: #f0b2a8; }
+
+/* ---------- Round icons (subtle) ---------- */
+.social-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.05);
+  color: var(--ivory);
+  transition: transform 300ms var(--ease), background 300ms var(--ease), color 300ms var(--ease), border-color 300ms var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+.social-btn svg { width: 19px; height: 19px; fill: currentColor; }
+
+@media (hover: hover) {
+  .social-btn:hover {
+    transform: translateY(-3px);
+    background: rgba(255,255,255,.10);
+    color: var(--champagne);
+    border-color: rgba(180,154,118,.55);
+  }
+}
+.social-btn:active { transform: scale(.94); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .contact-grid { grid-template-columns: 1fr; gap: 38px; }
+}
+@media (max-width: 620px) {
+  .cf-row { grid-template-columns: 1fr; gap: 0; }
+  .contact-card { padding: 22px 18px; border-radius: 22px; }
+  .cf-submit { width: 100%; justify-content: space-between; }
+  .social-btn { width: 50px; height: 50px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cf-submit, .cf-submit-arrow, .social-btn { transition: none; }
+}
+
+
+
     .site-footer { background: #1c1c19; color: var(--ivory); padding: 28px 0; }
     .footer-inner { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
     .footer-brand { font-family: var(--serif); font-size: 1.1rem; }
@@ -1232,11 +1611,10 @@
       .hero-image-frame::before { inset: 10px -10px -10px 10px; }
       .hero-caption { font-size: .58rem; }
       .about-grid { grid-template-columns: 1fr; gap: 38px; }
+      .about-card { padding: 22px 20px; border-radius: 22px; }
+      .about-card .lead { font-size: 1.1rem; padding-left: 14px; }
+      .about-actions { flex-direction: column; align-items: flex-start; }
       .about-visual { max-width: 350px; width: 100%; margin-inline: auto; }
-      .about-art { min-height: 310px; }
-      .about-art::before { width: 180px; height: 180px; }
-      .about-art::after { width: 240px; height: 240px; }
-      .about-copy .lead { font-size: 1.02rem; }
       .section-heading { margin-bottom: 34px; }
       .expertise-grid { grid-template-columns: 1fr; }
       .expertise-item, .expertise-item:nth-child(even) { padding: 25px 0; border-right: 0; grid-template-columns: 38px 1fr; gap: 14px; }
@@ -1649,9 +2027,9 @@
 </a>
 
 <!-- WhatsApp -->
-  <a class="icon-link" href="https://wa.me/94713164826" target="_blank" rel="noopener noreferrer" data-placeholder-link aria-label="WhatsApp (update link)" title="WhatsApp">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-  </a>
+<a class="icon-link" href="https://wa.me/94713164826" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" title="WhatsApp">
+  <svg viewBox="1 1 22 22" aria-hidden="true"><path fill-rule="evenodd" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.12c-.25.69-1.43 1.32-1.97 1.4-.5.07-1.13.1-1.82-.11-.42-.13-.96-.31-1.65-.6-2.9-1.25-4.8-4.17-4.94-4.37-.15-.2-1.18-1.57-1.18-2.99 0-1.42.75-2.12 1.01-2.41.26-.29.57-.36.76-.36l.55.01c.18.01.42-.07.65.5.25.58.83 2.02.9 2.17.07.15.12.32.02.51-.1.2-.15.32-.3.49-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.76 1.26 1.63 2.04 1.12 1 2.06 1.31 2.35 1.46.29.15.46.12.63-.07.17-.2.73-.85.93-1.15.2-.29.39-.24.66-.15.27.1 1.7.8 1.99.95.29.15.49.22.56.34.07.12.07.7-.18 1.39z"/></svg>
+</a>
 
   <!-- Telephone -->
   <a class="icon-link" href="tel:+94713164826" data-placeholder-link aria-label="Telephone (update number)" title="Call">
@@ -1696,23 +2074,41 @@
       <div class="container about-grid">
         <div class="about-visual reveal reveal--image">
           <!-- EDIT HERE: Replace the monogram artwork with a verified portrait or teaching photograph if desired. -->
-          <div class="about-art" role="img" aria-label="Decorative Sandali Ashara monogram placeholder">
-            <div class="about-art-inner">
-              <div class="monogram">SA</div>
-              <p>Language · Thought · Growth</p>
-            </div>
+            <div class="about-photo">
+            <img src="https://imag.sandaliashara.com/asset/Sandali_Ashara.avif"
+                alt="Sandali Ashara"
+                loading="lazy"
+                onerror="this.style.display='none'">
           </div>
         </div>
-        <div class="about-copy reveal">
-          <p class="eyebrow">About Sandali</p>
-          <h2 id="aboutTitle">A Thoughtful Approach to <span class="accent">Language Education</span></h2>
-          <p class="lead">Language is more than a subject to learn. It is a way to communicate ideas, explore perspectives, and connect with the world.</p>
-          <!-- EDIT HERE: Replace with Sandali's verified professional biography. -->
-          <p>Sandali Ashara is an English language and literature educator, English language lecturer, and teacher trainer with a professional interest in language education, literary studies, and teacher development. Her work reflects a broad engagement with English language teaching and learning across diverse educational contexts.</p>
-          <!-- <p>Her full academic background, teaching experience, and professional milestones can be added here as verified details become available.</p> -->
-          <a class="text-link" href="#qualifications">Discover My Journey <span class="arrow" aria-hidden="true">↗</span></a>
-          <div class="about-signoff" aria-hidden="true">Learning, thoughtfully.</div>
-        </div>
+       <div class="about-copy reveal">
+  <p class="eyebrow">About Sandali</p>
+  <h2 id="aboutTitle">A Thoughtful Approach to <span class="accent">Language Education</span></h2>
+
+  <div class="about-card">
+    <p class="lead">Language is more than a subject to learn. It is a way to communicate ideas, explore perspectives, express creativity, and connect with the world.</p>
+
+    <p>I am Sandali Ashara, an English Language and Literature Educator, Lecturer, and Teacher Trainer passionate about creating meaningful learning experiences. My professional journey is shaped by a deep interest in language, literature, pedagogy, and the evolving landscape of education.</p>
+
+    <div class="about-more" id="aboutMore">
+      <div class="about-more-inner">
+        <p>I view education as a continuous process of discovery, where teaching and learning complement one another. My approach embraces reflective practice, activity based language learning, and innovative pedagogical strategies that encourage individuals to become confident communicators, independent thinkers, and lifelong learners.</p>
+
+        <p>Beyond teaching, I am interested in exploring educational ideas, questioning conventional practices, and transforming meaningful insights into practical learning experiences. I believe that effective education should not simply equip learners with knowledge but inspire them to think, create, communicate, and see the world from different perspectives.</p>
+      </div>
+    </div>
+
+    <div class="about-actions">
+      <button class="about-toggle" id="aboutToggle" type="button" aria-expanded="false" aria-controls="aboutMore">
+        <span class="about-toggle-label">See more</span>
+        <span class="about-toggle-icon" aria-hidden="true">+</span>
+      </button>
+      <a class="text-link" href="#qualifications">Discover My Journey <span class="arrow" aria-hidden="true">↗</span></a>
+    </div>
+  </div>
+
+  <div class="about-signoff" aria-hidden="true">Learning, thoughtfully.</div>
+</div>
       </div>
     </section>
 
@@ -1888,9 +2284,7 @@
           <img src="https://imag.sandaliashara.com/logos/esoftlogo.jpg" alt="Institution 09 logo" loading="lazy">
           <span class="institution-name">ESOFT Metro Campus</span>
         </div>
-    </div>
-    <p class="collab-note">Development placeholders only. Replace with authentic logos and verified relationships before publishing.</p>
-  </div>
+   
 </section>
 
     <!-- PUBLICATIONS -->
@@ -1936,7 +2330,7 @@
       <figure class="gallery-card reveal">
         <div class="gallery-media">
           <div class="gallery-sample">Sample photo</div>
-          <img src="https://imag.sandaliashara.com/asset/lecturer_sandali_ashara.avif" alt="Sandali Ashara delivering a lecture" loading="lazy" decoding="async" onerror="this.style.display='none'">
+          <img src="https://imag.sandaliashara.com/asset/lecturer_sandali_ashara.avif" alt="Sandali Ashara delivering a lecture" data-gallery>
         </div>
         <figcaption class="gallery-caption">
           <span class="gallery-no">HIGHLIGHT / 01</span>
@@ -1949,7 +2343,7 @@
       <figure class="gallery-card reveal reveal-delay-1">
         <div class="gallery-media">
           <div class="gallery-sample">Sample photo</div>
-          <img src="https://imag.sandaliashara.com/asset/University_of_Ruhuna.avif" alt="Teacher training workshop" loading="lazy" decoding="async" onerror="this.style.display='none'">
+          <img src="https://imag.sandaliashara.com/asset/University_of_Ruhuna.avif" alt="Teacher training workshop" data-gallery>
         </div>
         <figcaption class="gallery-caption">
           <span class="gallery-no">HIGHLIGHT / 02</span>
@@ -1962,7 +2356,7 @@
       <figure class="gallery-card reveal reveal-delay-2">
         <div class="gallery-media">
           <div class="gallery-sample">Sample photo</div>
-          <img src="https://imag.sandaliashara.com/asset/celta_program_british_council.avif" alt="Academic event" loading="lazy" decoding="async" onerror="this.style.display='none'">
+          <img src="https://imag.sandaliashara.com/asset/celta_program_british_council.avif" alt="Academic event" data-gallery>
         </div>
         <figcaption class="gallery-caption">
           
@@ -2053,25 +2447,95 @@
 
 
     <!-- CONTACT -->
-    <section class="section contact-section" id="contact" aria-labelledby="contactTitle">
-      <div class="container contact-grid">
-        <div class="reveal">
-          <p class="eyebrow">Get in Touch</p>
-          <h2 id="contactTitle">Let's Create Meaningful <span class="accent">Learning Experiences.</span></h2>
-          <p>For teaching opportunities, teacher training, academic collaboration, lectures, and educational projects, use one of the contact channels below.</p>
+   <!-- CONTACT -->
+<section class="section contact-section" id="contact" aria-labelledby="contactTitle">
+  <div class="container contact-grid">
+
+    <div class="contact-intro reveal">
+      <p class="eyebrow">Get in Touch</p>
+      <h2 id="contactTitle">Let's Create Meaningful <span class="accent">Learning Experiences.</span></h2>
+      <p>For teaching opportunities, teacher training, academic collaboration, lectures, and educational projects, send a message and I'll get back to you as soon as possible.</p>
+    </div>
+
+    <div class="contact-panel reveal reveal-delay-1">
+
+      <!-- Glass form card -->
+      <form class="contact-card" id="contactForm" action="https://api.web3forms.com/submit" method="POST" novalidate>
+        <!-- EDIT HERE: Web3Forms access key එක දාන්න -->
+        <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
+        <input type="hidden" name="subject" value="New message from sandaliashara.com">
+        <input type="hidden" name="from_name" value="Sandali Ashara Website">
+        <!-- Spam honeypot -->
+        <input type="checkbox" name="botcheck" class="cf-honeypot" tabindex="-1" autocomplete="off">
+
+        <div class="cf-row">
+          <div class="cf-field">
+            <label for="cfName">Name</label>
+            <input type="text" id="cfName" name="name" placeholder="Your full name" autocomplete="name" required>
+          </div>
+          <div class="cf-field">
+            <label for="cfEmail">Email</label>
+            <input type="email" id="cfEmail" name="email" placeholder="you@example.com" autocomplete="email" required>
+          </div>
         </div>
-        <div class="contact-links reveal reveal-delay-1">
-          <!-- EDIT HERE: Replace # with a real email, e.g. mailto:name@example.com -->
-          <a class="contact-link" href="#" data-placeholder-link><span>Email enquiries</span><span aria-hidden="true">↗</span></a>
-          <!-- EDIT HERE: Replace # with Sandali's real LinkedIn URL. -->
-          <a class="contact-link" href="#" data-placeholder-link><span>Connect on LinkedIn</span><span aria-hidden="true">↗</span></a>
-          <!-- EDIT HERE: Replace # with a verified telephone URL. -->
-          <a class="contact-link" href="#" data-placeholder-link><span>Telephone</span><span aria-hidden="true">↗</span></a>
-          <!-- EDIT HERE: Replace # with a valid WhatsApp click-to-chat URL. -->
-          <a class="contact-link" href="#" data-placeholder-link><span>WhatsApp</span><span aria-hidden="true">↗</span></a>
+
+        <div class="cf-field">
+  <label for="cfPhone">Phone Number</label>
+  <input type="tel" id="cfPhone" name="phone" placeholder="+94 7X XXX XXXX"
+         autocomplete="tel" inputmode="tel" maxlength="16"
+         pattern="^\+?[0-9\s]{9,15}$"
+         title="Enter a valid phone number, e.g. +94 71 234 5678">
+</div>
+
+        <div class="cf-field">
+          <label for="cfMessage">Message</label>
+          <textarea id="cfMessage" name="message" rows="5" placeholder="How can I help you?" required></textarea>
         </div>
+
+        <button class="cf-submit" type="submit">
+          <span class="cf-submit-label">Send Message</span>
+          <span class="cf-submit-arrow" aria-hidden="true">→</span>
+        </button>
+
+        <p class="cf-status" id="cfStatus" role="status" aria-live="polite"></p>
+      </form>
+
+      <!-- Round glass social icons -->
+      <p class="contact-or">Or reach out directly</p>
+      <div class="contact-socials">
+
+        <!-- Facebook -->
+        <a class="social-btn" href="https://facebook.com/SandaliLit/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" title="Facebook">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+
+        <!-- WhatsApp -->
+        <a class="social-btn" href="https://wa.me/94713164826" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" title="WhatsApp">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+        </a>
+
+        <!-- LinkedIn -->
+        <a class="social-btn" href="https://lk.linkedin.com/in/sandali-ashara-78029792" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.125 2.062 2.062 0 0 1 0 4.125zM7.119 20.452H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+
+        <!-- Phone (dialer app) -->
+        <a class="social-btn" href="tel:+94713164826" aria-label="Call" title="Call">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        </a>
+
+        <!-- Email (mail app) — EDIT HERE: real email දාන්න -->
+        <a class="social-btn" href="mailto:your@email.com" aria-label="Email" title="Email">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.2-8 5-8-5V6l8 5 8-5v2.2z"/></svg>
+        </a>
+
       </div>
-    </section>
+    </div>
+
+  </div>
+</section>
+
+
   </main>
 
   <!-- FOOTER -->
@@ -2188,6 +2652,84 @@ if (headerSocials && primaryNav) {
       }
     }
 
+        /* About: See more / See less */
+        const aboutToggle = document.getElementById("aboutToggle");
+        const aboutMore = document.getElementById("aboutMore");
+
+        if (aboutToggle && aboutMore) {
+          const label = aboutToggle.querySelector(".about-toggle-label");
+
+          aboutToggle.addEventListener("click", () => {
+            const open = aboutToggle.getAttribute("aria-expanded") === "true";
+            aboutToggle.setAttribute("aria-expanded", String(!open));
+            aboutMore.classList.toggle("is-open", !open);
+            label.textContent = open ? "See more" : "See less";
+          });
+        }
+
+        
+        /* Contact form → Web3Forms (page reload නැතිව) */
+const contactForm = document.getElementById("contactForm");
+const cfStatus = document.getElementById("cfStatus");
+
+if (contactForm && cfStatus) {
+  const submitBtn = contactForm.querySelector(".cf-submit");
+  const submitLabel = contactForm.querySelector(".cf-submit-label");
+
+  const setStatus = (msg, type) => {
+    cfStatus.textContent = msg;
+    cfStatus.className = "cf-status" + (type ? " is-" + type : "");
+  };
+
+  contactForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    /* Simple validation */
+    let valid = true;
+    contactForm.querySelectorAll("[required]").forEach((field) => {
+      const ok = field.type === "email"
+        ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(field.value.trim())
+        : field.value.trim() !== "";
+      field.closest(".cf-field").classList.toggle("has-error", !ok);
+      if (!ok) valid = false;
+    });
+    if (!valid) { setStatus("Please fill in your name, a valid email, and a message.", "error"); return; }
+
+    submitBtn.disabled = true;
+    submitLabel.textContent = "Sending...";
+    setStatus("", "");
+
+    try {
+      const response = await fetch(contactForm.action, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(Object.fromEntries(new FormData(contactForm)))
+      });
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setStatus("Thank you! Your message has been sent. I'll be in touch soon.", "success");
+        contactForm.reset();
+      } else {
+        setStatus(result.message || "Something went wrong. Please try again.", "error");
+      }
+    } catch (error) {
+      setStatus("Network error. Please check your connection and try again.", "error");
+    } finally {
+      submitBtn.disabled = false;
+      submitLabel.textContent = "Send Message";
+    }
+  });
+
+  /* Error border එක type කරද්දී අයින් වෙනවා */
+  contactForm.addEventListener("input", (event) => {
+    const wrap = event.target.closest(".cf-field");
+    if (wrap) wrap.classList.remove("has-error");
+  });
+}
+
+
+
     /* =========================================================
        5. FOOTER YEAR
        ========================================================= */
@@ -2257,18 +2799,29 @@ document.querySelectorAll(".button--glass").forEach((btn) => {
 const TESTIMONIALS = [
   { name: "Lakshmi Rekha",         org: "University of Ruhuna",   photo: "https://imag.sandaliashara.com/testimonials/lakshmiprofile.jpg", shot: "https://imag.sandaliashara.com/testimonials/lakshmirekha.avif",
     text: "l am delighted to write a Linkedin recommendation for my esteemed colleague,Sandali who has been an invaluable asset to our faculty as an Assistant Lecturer in English." },
-  { name: "Michael Perera",   org: "University Lecturer",         photo: "images/t2.jpg", shot: "images/review2.jpg",
-    text: "Her dedication to language education and learner development is reflected in every programme she conducts." },
-  { name: "Samuni Fernando",  org: "ESL Educator",                photo: "images/t3.jpg", shot: "images/review3.jpg",
-    text: "Thoughtful, creative and highly professional in every educational initiative she leads." },
-  { name: "Nimal Seneviratne",org: "Academic Consultant",         photo: "images/t4.jpg", shot: "images/review4.jpg",
-    text: "A passionate advocate for learner-centred education and academic excellence." },
-  { name: "Tharuka Jayasinghe",org: "Teacher Trainer",            photo: "images/t5.jpg", shot: "images/review5.jpg",
-    text: "Her workshops blend theory and practice in a way that is both engaging and impactful." },
-  { name: "Ashani Peris",     org: "Former Student",              photo: "images/t6.jpg", shot: "images/review6.jpg",
-    text: "Every class was a space for growth, confidence and genuine learning." }
+
+  { name: "Dr.H.M.I.Prasanna",   org: "Dean (Faculty of Geomatics, Sabaragamuwa University)",         photo: "https://imag.sandaliashara.com/logos/sabaragamuwauni.png", shot: "https://imag.sandaliashara.com/testimonials/university%20sabaragamuwa%20appreciation%20letter.avif",
+    text: "On behalf of the Faculty of Geomatics, I wish to express my appreciation for your contribution to the English Camp for the Year I Semester I Students...." },
+
+    { name: "Prof. Sujeewa Amarasena",     org: "Vice Chancellor,  University of Ruhuna,",              photo: "https://imag.sandaliashara.com/logos/ruhuna-uni.png", shot: "https://imag.sandaliashara.com/testimonials/university%20of%20ruhuna.avif",
+    text: "I herewith extend my heartiest gratitude for your eminent service as a resource person to the Career Guidance Unit, University of Ruhuna." },
+
+  { name: "Prof.P.A.P.Samantha Kumara",  org: "Dean Faculty of Management and Finance University of Ruhuna",                photo: "https://imag.sandaliashara.com/testimonials/2020-logo.jpg", shot: "https://imag.sandaliashara.com/testimonials/appreciation-.avif",
+    text: "We take much pleasure in informing you that the International Conference on Management and Economics (ICME-2020) which was held on 11th September 2020 at Waligama Bay Marriot Resort was concluded with remarkable success." },
+
+  { name: "Dr. K.M. Somarathna",org: "Regional Director of Health Services Galle.",         photo: "https://imag.sandaliashara.com/testimonials/office%20of%20the%20distric%20unawatunalogo.jpg", shot: "https://imag.sandaliashara.com/testimonials/office%20of%20the%20distric%20unawatuna.avif",
+    text: "This is to express my heartfelt appreciation for your outstanding performance as the compere at Generating Evidence for Better Health Care in Southern Province 2023, research dissemination session, jointly organized by the Department of Nursing, Faculty of Allied Health Sciences, University of Ruhuna" },
+
+  { name: "Prof. Imendra Kotapola",org: "Dean, Faculty of Allied Health Sciences University of Ruhuna",            photo: "https://imag.sandaliashara.com/logos/ruhuna-uni.png", shot: "https://imag.sandaliashara.com/testimonials/faculty%20health.avif",
+    text: "I am writing to express our sincere appreciation for the exceptional service you rendered as a Temporary Lecturer in English at the Faculty of Allied Health Sciences, University of Ruhuna. During your tenure with us, your dedication, passion, and expertise" },
+
+  { name: "Prof. Thushari Bandara",     org: "Dean, Faculty of Allied Health Sciences University of Ruhuna",              photo: "https://imag.sandaliashara.com/logos/ruhuna-uni.png", shot: "https://imag.sandaliashara.com/testimonials/faculty%20allied%20health%20check.avif",
+    text: "We would like to express our sincere gratitude for your contribution as a resource person to the orientation programme of the 2024/2025 batch of students of the Faculty of Allied Health Sciences, University of Ruhuna." }
+
+    
 ];
  
+
 (function () {
   const track = document.getElementById("tTrack");
   if (!track) return;
@@ -2309,48 +2862,84 @@ const TESTIMONIALS = [
   const panel = modal.querySelector(".t-panel");
   const top = modal.querySelector(".t-panel-top");
   const shot = modal.querySelector(".t-shot");
-  let lastBtn = null, closeTimer = null;
- 
-  /* clip-path that matches the View button's exact box */
-  function insetFor(btn) {
-    const p = panel.getBoundingClientRect(), b = btn.getBoundingClientRect();
-    return `inset(${b.top - p.top}px ${p.right - b.right}px ${p.bottom - b.bottom}px ${b.left - p.left}px round 999px)`;
+
+ let lastBtn = null, closeTimer = null, opening = false;
+
+/* ---------- preload + decode (cache) ---------- */
+const shotCache = {};
+function preloadShot(i) {
+  if (shotCache[i]) return shotCache[i];
+  const im = new Image();
+  im.decoding = "async";
+  im.src = TESTIMONIALS[i].shot;
+  shotCache[i] = (im.decode ? im.decode() : new Promise(r => { im.onload = r; im.onerror = r; }))
+    .then(() => im, () => im);
+  return shotCache[i];
+}
+/* page එක load උනාම පස්සේ background එකේ ඔක්කොම preload කරනවා */
+window.addEventListener("load", () => {
+  setTimeout(() => TESTIMONIALS.forEach((_, i) => preloadShot(i)), 800);
+});
+/* mouse එක View button එක උඩට ආපු ගමන් preload පටන් ගන්නවා */
+track.addEventListener("pointerover", e => {
+  const b = e.target.closest(".t-view");
+  if (b) preloadShot(+b.dataset.i);
+});
+
+/* clip-path that matches the View button's exact box */
+function insetFor(btn) {
+  const p = panel.getBoundingClientRect(), b = btn.getBoundingClientRect();
+  return `inset(${b.top - p.top}px ${p.right - b.right}px ${p.bottom - b.bottom}px ${b.left - p.left}px round 999px)`;
+}
+
+async function openModal(btn) {
+  if (opening) return;
+  opening = true;
+  const i = +btn.dataset.i;
+  const t = TESTIMONIALS[i];
+  clearTimeout(closeTimer);
+
+  /* image එක ready වෙනකම් ඉන්නවා (උපරිම 1.5s) */
+  const im = await Promise.race([preloadShot(i), new Promise(r => setTimeout(() => r(null), 1500))]);
+
+  lastBtn = btn;
+  top.innerHTML = `${avatar(t)}<div class="t-who"><h3 class="t-name">${t.name}</h3><span class="t-org">${t.org}</span></div>`;
+
+  if (im && im.naturalWidth) {
+    shot.innerHTML = `<img src="${t.shot}" alt="Review by ${t.name}" width="${im.naturalWidth}" height="${im.naturalHeight}">`;
+  } else {
+    shot.textContent = "Review screenshot not found";
   }
- 
-  function openModal(btn) {
-    const t = TESTIMONIALS[btn.dataset.i];
-    clearTimeout(closeTimer);
-    lastBtn = btn;
-    top.innerHTML = `${avatar(t)}<div class="t-who"><h3 class="t-name">${t.name}</h3><span class="t-org">${t.org}</span></div>`;
-    shot.innerHTML = `<img src="${t.shot}" alt="Review by ${t.name}" onerror="this.parentNode.textContent='Review screenshot not found'">`;
- 
-    document.body.classList.add("t-modal-open");
-    document.body.style.overflow = "hidden";
-    modal.classList.add("is-on");
- 
-    panel.style.transition = "none";
-    panel.style.clipPath = insetFor(btn);          /* start = button shape */
-    void panel.offsetWidth;                         /* force reflow */
-    panel.style.transition = "";
-    requestAnimationFrame(() => {
-      modal.classList.add("is-open");
-      panel.style.clipPath = "inset(0 round 26px)"; /* expand to full card */
-    });
-    modal.querySelector(".t-close").focus({ preventScroll: true });
-  }
- 
-  function closeModal() {
-    if (!modal.classList.contains("is-open")) return;
-    modal.classList.remove("is-open");
-    if (lastBtn) panel.style.clipPath = insetFor(lastBtn); /* shrink back into button */
-    closeTimer = setTimeout(() => {
-      modal.classList.remove("is-on");
-      document.body.classList.remove("t-modal-open");
-      document.body.style.overflow = "";
-      panel.style.clipPath = "";
-      if (lastBtn) lastBtn.focus({ preventScroll: true });
-    }, 650);
-  }
+
+  document.body.classList.add("t-modal-open");
+  document.body.style.overflow = "hidden";
+  modal.classList.add("is-on");
+
+  /* panel එකේ final size එක දැන් fix, ඒ නිසා start shape එක හරියටම මැනෙනවා */
+  panel.style.transition = "none";
+  panel.style.clipPath = insetFor(btn);
+  void panel.offsetWidth;
+  panel.style.transition = "";
+  requestAnimationFrame(() => {
+    modal.classList.add("is-open");
+    panel.style.clipPath = "inset(0 round 26px)";
+  });
+  modal.querySelector(".t-close").focus({ preventScroll: true });
+  opening = false;
+}
+
+function closeModal() {
+  if (!modal.classList.contains("is-open")) return;
+  modal.classList.remove("is-open");
+  if (lastBtn) panel.style.clipPath = insetFor(lastBtn);
+  closeTimer = setTimeout(() => {
+    modal.classList.remove("is-on");
+    document.body.classList.remove("t-modal-open");
+    document.body.style.overflow = "";
+    panel.style.clipPath = "";
+    if (lastBtn) lastBtn.focus({ preventScroll: true });
+  }, 540);
+}
  
   track.addEventListener("click", e => {
     const btn = e.target.closest(".t-view");
@@ -2441,6 +3030,40 @@ const TESTIMONIALS = [
   marquee.addEventListener("pointerleave", () => { hover = false; });
  
  
+})();
+
+
+/* ---------------------------------------------------------
+   GALLERY: photos 
+   --------------------------------------------------------- */
+(function () {
+  const cards = document.querySelectorAll(".gallery-card");
+  if (!cards.length) return;
+
+  cards.forEach((card) => {
+    const img = card.querySelector("img[data-gallery]");
+    const markReady = () => card.classList.add("is-ready");
+
+    if (!img) { markReady(); return; }
+
+    const src = img.currentSrc || img.src;
+    const pre = new Image();
+    pre.decoding = "async";
+    pre.src = src;
+
+    const done = () => markReady();
+    const fail = () => { img.style.display = "none"; markReady(); };
+
+    if (pre.decode) {
+      pre.decode().then(done, fail);
+    } else {
+      pre.onload = done;
+      pre.onerror = fail;
+    }
+
+    /* net  slow  */
+    setTimeout(markReady, 6000);
+  });
 })();
 
   </script>
