@@ -192,9 +192,11 @@
 /* Mobile: text top-left, gradient strongest top-left and fading to bottom-right */
 /* Mobile: text top-left, gradient heavier on the left, lighter on the right */
 /* Mobile: text top-left (a bit lower), tighter line spacing */
-@media (max-width: 760px) {
+@media (max-width: 760px) and (pointer: coarse) {
   .hb { min-height: 640px; align-items: flex-start; }
   .hb-media img { object-position: 73% 80%; }
+
+
   .hb::before {
     background:
       linear-gradient(90deg,
